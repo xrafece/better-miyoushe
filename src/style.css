@@ -1,0 +1,340 @@
+@import 'tailwindcss';
+
+#make-miyoushe-great-again {
+    .el-table .cell {
+        padding: 0;
+    }
+
+    .star-5 {
+        background-color: #e8d8bb;
+    }
+
+    .star-4 {
+        background-color: #cbb4de;
+    }
+
+    .star-3 {
+        background-color: #b6c0df;
+    }
+}
+
+/* resotre miyoushe's filter images dispaly */
+.weapon-filter img,
+.character-filter img {
+    display: inline;
+}
+
+/* optimization miyoushe's display */
+.header {
+    background-color: #3d2985;
+}
+
+.mhy-qrcode-top-card {
+    display: none;
+}
+
+.mhy-ad-container {
+    display: none;
+}
+
+.mhy-rocket {
+    bottom: 110px !important;
+}
+
+.fixed_side.mhy-qrcode-bottom-card {
+    display: none;
+}
+
+.mhy-home__post-wrp {
+    display: none !important;
+}
+
+.mhy-side-section {
+    display: none;
+}
+
+.mhy-side-section.game-tool {
+    display: block;
+}
+
+.mhy-article-page-author {
+    top: 92px !important;
+}
+
+
+/* miyoushe home page */
+.mhy-home {
+    .mhy-layout__main {
+        width: 1000px;
+    }
+
+    .mhy-layout__sub {
+        position: absolute;
+        left: 820px;
+    }
+
+    @media screen and (min-width: 1200px) {
+        .mhy-layout__sub {
+            position: absolute;
+            left: calc(220px + 50%);
+        }
+
+    }
+
+    .fixed_side.mhy-layout__sub_fixed-side>div:nth-child(1) {
+        display: none !important;
+        height: 0 !important;
+    }
+
+    .is-fixed {
+        position: static !important;
+    }
+}
+
+.mhy-forum,
+.mhy-home {
+    .mhy-article-list__body {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .mhy-article-card {
+        width: 50%;
+        overflow: hidden;
+
+        .mhy-article-card__content {
+            white-space: normal;
+            float: botton;
+        }
+
+        .mhy-article-card__img {
+            width: 440px;
+            height: 204px;
+        }
+
+        .mhy-article-card__video {
+            position: relative;
+            width: 440px;
+            height: 248px;
+        }
+
+        .mhy-article-card__preview>div:nth-child(2),
+        .mhy-article-card__preview>div:nth-child(3) {
+            display: none;
+        }
+    }
+}
+
+.mhy-forum {
+    .mhy-layout__main {
+        width: 880px;
+    }
+
+    .mhy-article-card {
+        .mhy-article-card__img {
+            width: 380px;
+            height: 170px;
+        }
+
+        .mhy-article-card__video {
+            width: 380px;
+            height: 214px;
+        }
+    }
+
+    .mhy-layout__sub {
+        width: 90px;
+
+        .fixed_side {
+            width: 90px;
+        }
+    }
+
+    .mhy-side-section.game-tool {
+        display: block;
+        width: 90px;
+        height: 570px;
+        margin-top: 0;
+    }
+
+    .game-tool .game-tool-info .tools_max_height {
+        height: 518px;
+    }
+
+    .game-tool .game-tool-info_max {
+        justify-content: flex-start;
+        flex-direction: column;
+        align-items: center;
+        align-content: center;
+
+        .game-tool-info_max_info {
+            margin-left: 0;
+        }
+    }
+
+    .is-fixed {
+        top: 140px !important;
+        width: 90px !important;
+    }
+}
+
+.mhy-forum.mhy-guide-forum {
+    .mhy-layout__main {
+        padding-top: 70px;
+    }
+
+    .mhy-guide-search__form {
+        left: -910px;
+        width: 1000px;
+    }
+
+    input {
+        background-color: #fff;
+    }
+}
+
+.mhy-forum.mhy-image-forum {
+    .mhy-img-article-card {
+        width: 280px;
+
+        .mhy-img-article-card__img {
+            width: 280px;
+            height: 280px;
+        }
+    }
+
+    .mhy-article-list__body {
+        padding-top: 375px;
+    }
+
+    .mhy-side-section.mhy-image-forum__ranking {
+        display: block;
+        width: 880px;
+        height: 352px;
+        position: relative;
+        left: -910px;
+        top: -590px;
+
+        .mhy-side-section__body {
+            display: flex;
+            padding: 0;
+
+            .mhy-img-ranking-card {
+                padding-top: 0;
+                padding-left: 0;
+                flex-direction: column;
+                border-top: none;
+                border-right: 1px solid #ebebeb;
+
+                .mhy-img-ranking-card__img {
+                    width: 220px;
+                    height: 220px;
+                }
+
+                .mhy-img-ranking-card__info {
+                    display: flex;
+                    margin-top: 10px;
+                    margin-left: 0;
+                    height: 52px;
+
+                    .mhy-img-ranking-card__top {
+                        width: 137px;
+                        height: auto;
+                        margin-left: 10px;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                    }
+                    .mhy-img-ranking-card__user {
+                        margin-top: 6px;
+                    }
+
+                    .mhy-img-ranking-card__title {
+                        display: block;
+                    }
+
+                    .mhy-img-ranking-card__flex {
+                        flex-direction: column-reverse;
+                    }
+
+                }
+            }
+        }
+    }
+}
+
+.mhy-layout.mhy-main-page.mhy-article-page.mhy-video-page {
+    .mhy-side-section {
+        display: block !important;
+    }
+}
+
+
+/* yuanshen map */
+.bbs-qr {
+    display: none !important;
+}
+
+@media only screen and (min-width: 900px) {
+    .mhy-map .leaflet-control-zoomslider {
+        -webkit-transform: translate(-0.1rem, 0rem);
+        -ms-transform: translate(-0.1rem, 0rem);
+        transform: translate(-0.1rem, 0rem);
+    }
+}
+
+/* yuanshen wiki  */
+.home__bbs-recommend.home__bbs-recommend--has-more {
+    display: none;
+}
+
+.header__logo>img {
+    display: inline !important;
+}
+
+@media only screen and (min-width: 900px) {
+
+    .home__aside .announcement-mask,
+    .home__aside .home__map-btn--pc,
+    .home__aside .home-channel {
+        display: none !important;
+    }
+
+    .home__aside .home__bbs .home__back-top {
+        display: block !important;
+        position: fixed;
+        right: 37px;
+        bottom: 91px;
+    }
+
+    .home__banner {
+        width: 100% !important;
+        height: 300px !important;
+    }
+
+    .home__map {
+        width: 100% !important;
+    }
+
+    .kingkong-16-item--pc {
+        width: 186px !important;
+        margin-right: 4px;
+    }
+
+    .position-list {
+        margin-right: 0;
+    }
+
+    .collection-bg {
+        margin: auto !important;
+        width: 50% !important;
+        padding-right: 40px !important;
+    }
+
+    .footer--home {
+        width: 1200px !important;
+    }
+}
+
+.mhy-bbs-app-header {
+    display: none;
+}
