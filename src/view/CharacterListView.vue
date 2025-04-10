@@ -150,6 +150,7 @@ const charDom = characterDomStore()
 const charData = characterListStore()
 let dataList = ref([])
 let charList = charData.getCharacterList()
+dataList.value = [...charList]
 
 const clickS = () => {
     // console.log(charList)
