@@ -4,7 +4,7 @@ import './style.css'
 import App from './App.vue'
 import { GM_registerMenuCommand } from '$'
 import { characterPanelStore, STORGE_CHARACTER_LIST } from './store/view'
-import { isYsCalculator } from './util/pageType'
+import { isYsCalculator, isYsMap } from './util/pageType'
 import { getCookie } from './util/cookie'
 
 const charactorListUrl = 'https://api-takumi.mihoyo.com/event/e20200928calculate/v1/sync/avatar/list'
@@ -71,18 +71,31 @@ const fetchUserCharactorList = async (game_uid: string, region: string) => {
 
 const menu = () => {
     const showListPanle = characterPanelStore()
-    GM_registerMenuCommand('打开角色列表', () => {
-        console.log('open')
-        showListPanle.isShow ? showListPanle.hide() : showListPanle.show()
-    })
+    if (isYsMap()) {
+        showListPanle.isShow = false
+        return
+    }
+
+    if (showListPanle.isShow) {
+        GM_registerMenuCommand('关闭角色列表', () => {
+            showListPanle.isShow ? showListPanle.hide() : showListPanle.show()
+        })
+    }
+    if (!showListPanle.isShow) {
+        GM_registerMenuCommand('角色列表', () => {
+            showListPanle.isShow ? showListPanle.hide() : showListPanle.show()
+        })
+    }
+    if (isYsCalculator()) {
+        showListPanle.isShow = true
+        GM_registerMenuCommand('刷新角色列表', async () => {
+            const user = await getUserGameRolesByToken()
+            await fetchUserCharactorList(user.game_uid, user.region)
+        })
+    }
 }
 
 const main = async () => {
-    if (isYsCalculator()) {
-        console.log('ys calculator')
-        // overrideXHR()
-    }
-
     const app = createApp(App)
 
     const pinia = createPinia()
@@ -91,6 +104,14 @@ const main = async () => {
     app.mount(
         (() => {
             setTimeout(async () => {
+                let listStr = localStorage.getItem(STORGE_CHARACTER_LIST);
+                if (listStr != null) {
+                    let charList = JSON.parse(listStr)
+                    if (charList.length != 0) {
+                        console.log("<<<<<<------------------skip request")
+                        return;
+                    }
+                }
                 const user = await getUserGameRolesByToken()
                 await fetchUserCharactorList(user.game_uid, user.region)
             }, 0)

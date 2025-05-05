@@ -39,7 +39,6 @@ export const characterListStore = defineStore('charDataList', () => {
 
     const getCharacterList = () => {
         if (charList.value.length === 0) {
-            // alert('请先进入角色自定义计算器页面')
             return []
         }
         return charList.value

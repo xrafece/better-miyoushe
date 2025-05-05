@@ -23,7 +23,7 @@ export default defineConfig({
             entry: 'src/main.ts',
             userscript: {
                 name: 'Better Miyoushe',
-                version: '1.0.8.1',
+                version: '1.0.9',
                 description: 'Make Miyoushe Great Again 美化米游社页面，让米游社再次伟大！！！',
                 icon: 'https://img-static.mihoyo.com/favicon.ico',
                 namespace: 'http://xrafece.com',
@@ -37,6 +37,7 @@ export default defineConfig({
             build: {
                 externalGlobals: {
                     vue: cdn.jsdelivr('Vue', 'dist/vue.global.prod.js'),
+                    pinia: cdn.jsdelivr('Pinia', 'dist/pinia.iife.prod.js'),
                 },
             },
         }),
