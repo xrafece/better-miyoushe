@@ -295,12 +295,16 @@
 
     .home__aside .announcement-mask,
     .home__aside .home__map-btn--pc,
-    .home__aside .home-channel {
+    .home__aside .home-channel,
+    .home-block,
+    .home__position--id-190 .home-channel__right,
+    .summon .summon-aside
+    {
         display: none !important;
     }
 
     .home__aside .home__bbs .home__back-top {
-        display: block !important;
+        display: none !important;
         position: fixed;
         right: 37px;
         bottom: 91px;
@@ -313,6 +317,14 @@
 
     .home__map {
         width: 100% !important;
+    }
+
+    .summon {
+        margin-top: 260px !important;
+
+        .summon-content {
+            width: 1200px !important;
+        }
     }
 
     .kingkong-16-item--pc {
@@ -330,7 +342,7 @@
         padding-right: 40px !important;
     }
 
-    .footer--home {
+    .footer--home, .footer--summon {
         width: 1200px !important;
     }
 }
