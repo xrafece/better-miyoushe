@@ -22,19 +22,29 @@
 </style>
 
 <script setup lang="ts">
-import { characterPanelStore, characterDomStore, STORGE_SIDE_BUTTON_POSITION, characterListStore } from '@/store/view'
+import { characterPanelStore, STORGE_SIDE_BUTTON_POSITION } from '@/store/view'
+import { fetchUserCharactorList, getUserGameRolesByToken } from '@/util/request'
 import { Position, useDraggable, useElementBounding, useStorage, useWindowSize } from '@vueuse/core'
 import { computed, ref } from 'vue'
 
 const sideButton = characterPanelStore()
-const charaDom = characterDomStore()
 
 const storgeSideBtnPos = STORGE_SIDE_BUTTON_POSITION
 
-const one = ref(false)
 const clickBtn = () => {
-    charaDom.toggle()
-    one.value = !one.value;
+    const pageContent = `
+    <h1>hello world</h1>
+    <div id="app"></div>
+`
+    const blob = new Blob([pageContent], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank')
+    // charaDom.toggle()
+}
+
+const refresh = async () => {
+    const user = await getUserGameRolesByToken()
+    await fetchUserCharactorList(user.game_uid, user.region)
 }
 
 const target = ref<HTMLElement | null>(null)

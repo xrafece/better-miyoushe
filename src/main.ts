@@ -3,71 +3,10 @@ import { createPinia } from 'pinia'
 import './style.css'
 import App from './App.vue'
 import { GM_registerMenuCommand } from '$'
+
 import { characterPanelStore, STORGE_CHARACTER_LIST } from './store/view'
 import { isYsCalculator, isYsMap } from './util/pageType'
-import { getCookie } from './util/cookie'
-
-const charactorListUrl = 'https://api-takumi.mihoyo.com/event/e20200928calculate/v1/sync/avatar/list'
-const gameRoleUrl = 'https://passport-api.mihoyo.com/binding/api/getUserGameRolesByLtoken?game_biz=hk4e_cn'
-
-const getUserGameRolesByToken = async () => {
-    const resp = await fetch(gameRoleUrl, {
-        headers: {
-            accept: 'application/json, text/plain, */*',
-        },
-        referrerPolicy: 'strict-origin-when-cross-origin',
-        body: null,
-        method: 'GET',
-        mode: 'cors',
-        credentials: 'include',
-    })
-    if (resp.status !== 200) {
-        throw 'resp status is not 2000'
-    }
-    const respBody = await resp.json()
-    if (respBody.retcode !== 0) {
-        throw 'resp body retcode is not 0'
-    }
-    return respBody.data.list[0]
-}
-const fetchUserCharactorList = async (game_uid: string, region: string) => {
-    const body = {
-        uid: game_uid,
-        region: region,
-        element_attr_ids: [],
-        weapon_cat_ids: [],
-        page: 1,
-        size: 512,
-        lang: 'zh-cn',
-    }
-
-    const deviceFp = getCookie('DEVICEFP') || ''
-    const deviceId = getCookie('_MHYUUID') || ''
-
-    const resp = await fetch(charactorListUrl, {
-        headers: {
-            'content-type': 'application/json;charset=UTF-8',
-            'x-rpc-device_fp': deviceFp,
-            'x-rpc-device_id': deviceId,
-            'x-rpc-page': '__#',
-            'x-rpc-platform': '4',
-        },
-        body: JSON.stringify(body),
-        method: 'POST',
-        mode: 'cors',
-        credentials: 'include',
-    })
-
-    if (resp.status !== 200) {
-        throw 'resp status is not 2000'
-    }
-    const respBody = await resp.json()
-    if (respBody.retcode !== 0) {
-        throw 'resp body retcode is not 0'
-    }
-    const charList = respBody.data.list
-    localStorage.setItem(STORGE_CHARACTER_LIST, JSON.stringify(charList))
-}
+import { fetchUserCharactorList, getUserGameRolesByToken, overrideXHR } from './util/request'
 
 const menu = () => {
     const showListPanle = characterPanelStore()
@@ -104,13 +43,11 @@ const main = async () => {
     app.mount(
         (() => {
             setTimeout(async () => {
-                let listStr = localStorage.getItem(STORGE_CHARACTER_LIST);
-                if (listStr != null) {
-                    let charList = JSON.parse(listStr)
-                    if (charList.length != 0) {
-                        console.log("<<<<<<------------------skip request")
-                        return;
-                    }
+                let listStr = localStorage.getItem(STORGE_CHARACTER_LIST)
+                if (listStr != null || listStr != '[]') {
+                    // limit the requset to the first load script to prevent mhy official block
+                    console.log('<<<<<<------------------better-miyoushe skip request')
+                    return
                 }
                 const user = await getUserGameRolesByToken()
                 await fetchUserCharactorList(user.game_uid, user.region)
@@ -125,3 +62,6 @@ const main = async () => {
 
 main()
 menu()
+
+// 米游社计算器页面 通过覆写xhr实现自动刷新 localStorage 角色列表数据缓存
+overrideXHR()
