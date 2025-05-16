@@ -9,7 +9,7 @@ export default defineConfig({
     plugins: [
         vue(),
         cdn({
-            modules: ['vue'],
+            modules: ['vue', 'lodash'],
         }),
         viteSingleFile(),
     ],

@@ -1,8 +1,15 @@
 <script setup lang="js">
-// import charaterData from './assets/data.json'
-// console.log(charaterData)
+import { ref } from 'vue'
+import data from './assets/data.json'
+import _ from 'lodash'
+if (import.meta.env.MODE === 'development') {
+    localStorage.setItem('better-miyoushe-character-list', JSON.stringify(data))
+}
+
 const charaterStr = localStorage.getItem('better-miyoushe-character-list')
 let charaterData = JSON.parse(charaterStr || '[]')
+let vueData = ref([...charaterData])
+
 const skillStyle = (item, index) => {
     index--
     // 神里绫华 莫娜
@@ -73,21 +80,82 @@ const skillLevel = (item, index) => {
 
     return '+' + skill.level_current
 }
+const resetData = () => {
+    vueData.value = [...charaterData]
+}
+const sortById = () => {
+    vueData.value = _.orderBy(vueData.value, ['id'], ['desc'])
+}
+const sortByLevel = () => {
+    vueData.value = _.orderBy(vueData.value, ['level_current'], ['desc'])
+}
+const sortByConts = () => {
+    vueData.value = _.orderBy(
+        vueData.value,
+        ['avatar_level', 'constellation_num', 'level_current'],
+        ['desc', 'desc', 'desc'],
+    )
+}
+const sortByFetter = () => {
+    vueData.value = _.orderBy(
+        vueData.value,
+        [
+            (item) => {
+                let skillSum =
+                    item.skill_list[0].level_current +
+                    item.skill_list[1].level_current +
+                    item.skill_list[2].level_current
+                if (item.id == 10000002 || item.id == 10000041) {
+                    skillSum += item.skill_list[3].level_current
+                    skillSum -= item.skill_list[2].level_current
+                }
+                return skillSum
+            },
+            'avatar_level',
+            'level_current',
+            'constellation_num',
+        ],
+        ['desc', 'desc', 'desc','desc'],
+    )
+}
+
+const sortByCrown = () => {
+    vueData.value = _.orderBy(
+        vueData.value,
+        [
+            (item) => {
+                let isCrown = 0;
+                item.skill_list.forEach( skill => {
+                    if (skill.level_current > 9) {
+                        isCrown += 1
+                    }
+                });
+                return isCrown
+            },
+            'avatar_level',
+            'level_current',
+            'constellation_num',
+        ],
+        ['desc', 'desc', 'desc','desc'],
+    )
+}
 </script>
 
 <template>
     <div class="container">
         <div class="container-table-row table-head">
-            <div class="index-cell table-row-cell">#</div>
+            <div class="index-cell table-row-cell" @click="resetData()">#</div>
             <!-- <div class="id-cell table-row-cell">id</div> -->
-            <div class="character-cell table-row-cell">角色</div>
-            <div class="char-level table-row-cell">等级</div>
-            <div class="char-cons table-row-cell">命座</div>
+            <div class="character-cell table-row-cell" @click="sortById()">
+                <p>角色</p>
+            </div>
+            <div class="char-level table-row-cell" @click="sortByLevel()">等级</div>
+            <div class="char-cons table-row-cell" @click="sortByConts()">命座</div>
             <div class="char-fetter table-row-cell">好感</div>
             <div class="skill-cell table-row-cell">A</div>
             <div class="skill-cell table-row-cell">E</div>
-            <div class="skill-cell table-row-cell">Q</div>
-            <div class="char-weapon table-row-cell">武器</div>
+            <div class="skill-cell table-row-cell" @click="sortByCrown()">Q</div>
+            <div class="char-weapon table-row-cell" @click="sortByFetter()">武器</div>
             <!-- <div class="reliquary-cell table-row-cell">花饰</div>
             <div class="reliquary-cell table-row-cell">羽毛</div>
             <div class="reliquary-cell table-row-cell">沙漏</div>
@@ -96,7 +164,7 @@ const skillLevel = (item, index) => {
         </div>
         <div
             class="container-table-row"
-            v-for="(item, index) in charaterData"
+            v-for="(item, index) in vueData"
             :key="index"
             :class="index % 2 === 0 ? 'even-row' : 'odd-row'"
         >
@@ -202,6 +270,7 @@ const skillLevel = (item, index) => {
 
 .table-head {
     font-weight: bold;
+    cursor: pointer;
 }
 
 .table-head > div {
@@ -252,7 +321,7 @@ const skillLevel = (item, index) => {
     border-radius: 5px;
     display: inline-block;
     overflow: visible;
-    background: none;
+    background: nvueData;
 }
 .char-name {
     width: 100px;
@@ -348,7 +417,7 @@ const skillLevel = (item, index) => {
 .skill-cell {
     width: 60px;
     text-align: center;
-    box-shadow: none !important;
+    box-shadow: nvueData !important;
 }
 
 .skill-div {
@@ -373,7 +442,7 @@ const skillLevel = (item, index) => {
     border-radius: 5px;
     display: inline-block;
     overflow: visible;
-    background: none;
+    background: nvueData;
 }
 .weapon-name {
     width: 175px;
