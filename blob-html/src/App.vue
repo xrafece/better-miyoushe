@@ -89,14 +89,17 @@ const sortById = () => {
 const sortByLevel = () => {
     vueData.value = _.orderBy(vueData.value, ['level_current'], ['desc'])
 }
-const sortByConts = () => {
+const sortByFetter = () => {
+    vueData.value = _.orderBy(vueData.value, ['fetter_level', 'id'], ['asc', 'desc'])
+}
+const sortByCons = () => {
     vueData.value = _.orderBy(
         vueData.value,
         ['avatar_level', 'constellation_num', 'level_current'],
         ['desc', 'desc', 'desc'],
     )
 }
-const sortByFetter = () => {
+const sortBySpecial = () => {
     vueData.value = _.orderBy(
         vueData.value,
         [
@@ -115,7 +118,7 @@ const sortByFetter = () => {
             'level_current',
             'constellation_num',
         ],
-        ['desc', 'desc', 'desc','desc'],
+        ['desc', 'desc', 'desc', 'desc'],
     )
 }
 
@@ -124,19 +127,19 @@ const sortByCrown = () => {
         vueData.value,
         [
             (item) => {
-                let isCrown = 0;
-                item.skill_list.forEach( skill => {
+                let isCrown = 0
+                item.skill_list.forEach((skill) => {
                     if (skill.level_current > 9) {
                         isCrown += 1
                     }
-                });
+                })
                 return isCrown
             },
             'avatar_level',
             'level_current',
             'constellation_num',
         ],
-        ['desc', 'desc', 'desc','desc'],
+        ['desc', 'desc', 'desc', 'desc'],
     )
 }
 </script>
@@ -150,12 +153,12 @@ const sortByCrown = () => {
                 <p>角色</p>
             </div>
             <div class="char-level table-row-cell" @click="sortByLevel()">等级</div>
-            <div class="char-cons table-row-cell" @click="sortByConts()">命座</div>
-            <div class="char-fetter table-row-cell">好感</div>
+            <div class="char-cons table-row-cell" @click="sortByCons()">命座</div>
+            <div class="char-fetter table-row-cell" @click="sortByFetter()">好感</div>
             <div class="skill-cell table-row-cell">A</div>
             <div class="skill-cell table-row-cell">E</div>
             <div class="skill-cell table-row-cell" @click="sortByCrown()">Q</div>
-            <div class="char-weapon table-row-cell" @click="sortByFetter()">武器</div>
+            <div class="char-weapon table-row-cell" @click="sortBySpecial()">武器</div>
             <!-- <div class="reliquary-cell table-row-cell">花饰</div>
             <div class="reliquary-cell table-row-cell">羽毛</div>
             <div class="reliquary-cell table-row-cell">沙漏</div>
