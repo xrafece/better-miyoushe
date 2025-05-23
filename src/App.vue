@@ -1,8 +1,7 @@
 <template>
-     <SideButtonView></SideButtonView>
+     <SideButton></SideButton>
 </template>
 
 <script setup lang="ts">
-import SideButtonView from './view/SideButtonView.vue';
-
+     import SideButton from './view/SideBtn.vue';
 </script>
