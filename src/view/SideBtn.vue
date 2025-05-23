@@ -1,11 +1,25 @@
 <template>
     <div v-if="sideButton.isShow" :style="{ right: btnPos.right + 'px', bottom: btnPos.bottom + 'px' }"
-        class="group fixed flex flex-col justify-end will-change-[right,bottom] hover:text-opacity-100"
-        :class="{
+        class="group fixed flex flex-col justify-end will-change-[right,bottom] hover:text-opacity-100" :class="{
             'z-[100]': true,
             'z-[1000]': false,
         }">
-        <div v-if="!isYsCalculator()"
+        <div v-if="true"
+            class="mt-1 hidden h-10 w-10 cursor-pointer items-center justify-center rounded-lg  transition-colors hover:border-none hover:bg-[#00AEEC] hover:text-white group-hover:flex"
+            @click="hideButton()">
+            <div>
+                <svg t="1747971885242" class="w-full h-full" viewBox="0 0 1024 1024" version="1.1"
+                    xmlns="http://www.w3.org/2000/svg" p-id="3168" width="200" height="200">
+                    <path
+                        d="M938.666667 512c0 235.648-191.018667 426.666667-426.666667 426.666667S85.333333 747.648 85.333333 512 276.352 85.333333 512 85.333333s426.666667 191.018667 426.666667 426.666667z"
+                        fill="#313131" p-id="3169"></path>
+                    <path
+                        d="M635.562667 680.490667a31.786667 31.786667 0 1 0 44.928-44.928L556.928 512l123.562667-123.562667a31.744 31.744 0 1 0-44.928-44.928L512 467.072 388.437333 343.509333a31.786667 31.786667 0 1 0-44.928 44.928L467.072 512l-123.562667 123.562667a31.786667 31.786667 0 0 0 44.928 44.928L512 556.928l123.562667 123.562667z"
+                        fill="#38A2E7" p-id="3170"></path>
+                </svg>
+            </div>
+        </div>
+        <div v-if="true"
             class="mt-1 hidden h-10 w-10 cursor-pointer items-center justify-center rounded-lg  transition-colors hover:border-none hover:bg-[#00AEEC] hover:text-white group-hover:flex"
             @click="refresh()">
             <div>
@@ -41,8 +55,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import {  characterPanelStore } from '@/store/view'
-import { isYsCalculator } from '@/util/pageType'
+import { characterPanelStore, STORGE_SIDE_BUTTON_POSITION } from '@/store/view'
 import { fetchUserCharactorList, getUserGameRolesByToken } from '@/util/request'
 
 import { Position, useDraggable, useElementBounding, useStorage, useWindowSize } from '@vueuse/core'
@@ -58,8 +71,20 @@ const clickBtn = () => {
 }
 
 const refresh = async () => {
+    let yes = confirm('是否刷新角色列表？ 提示：请勿高频点击，否则可能触发米哈游接口限流')
+    if (!yes) {
+        return
+    }
     const user = await getUserGameRolesByToken()
     await fetchUserCharactorList(user.game_uid, user.region)
+}
+
+const hideButton = () => {
+    let yes = confirm('是否隐藏侧边按钮？')
+    if (!yes) {
+        return
+    }
+    sideButton.hide()
 }
 
 const sideButton = characterPanelStore()
@@ -67,7 +92,7 @@ const sideButton = characterPanelStore()
 const target = ref<HTMLElement | null>(null)
 const { width, height } = useElementBounding(target, { windowScroll: false })
 
-const btnPos = useStorage('bili-cleaner-side-btn-pos', { right: 10, bottom: 180 }, localStorage)
+const btnPos = useStorage(STORGE_SIDE_BUTTON_POSITION, { right: 10, bottom: 180 }, localStorage)
 
 const isDragging = ref(false)
 

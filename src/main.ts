@@ -15,17 +15,11 @@ const menu = () => {
         return
     }
 
-    if (showListPanle.isShow) {
-        GM_registerMenuCommand('关闭角色列表', () => {
-            showListPanle.isShow ? showListPanle.hide() : showListPanle.show()
-        })
-    }
-    if (!showListPanle.isShow) {
-        GM_registerMenuCommand('角色列表', () => {
-            showListPanle.isShow ? showListPanle.hide() : showListPanle.show()
-        })
-    }
-    if (isYsCalculator()) {
+    GM_registerMenuCommand('切换侧边按钮显示状态', () => {
+        showListPanle.isShow ? showListPanle.hide() : showListPanle.show()
+    })
+
+    if (!isYsCalculator()) {
         showListPanle.isShow = true
         GM_registerMenuCommand('刷新角色列表', async () => {
             const user = await getUserGameRolesByToken()
