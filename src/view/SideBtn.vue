@@ -5,7 +5,7 @@
             'z-[1000]': false,
         }">
         <div v-if="true"
-            class="mt-1 hidden h-10 w-10 cursor-pointer items-center justify-center rounded-lg  transition-colors hover:border-none hover:bg-[#00AEEC] hover:text-white group-hover:flex"
+            class="mt-1 hidden h-[40px] w-[40px] cursor-pointer items-center justify-center rounded-lg  transition-colors hover:border-none hover:bg-[#00AEEC] hover:text-white group-hover:flex"
             @click="hideButton()">
             <div>
                 <svg t="1747971885242" class="w-full h-full" viewBox="0 0 1024 1024" version="1.1"
@@ -20,7 +20,7 @@
             </div>
         </div>
         <div v-if="true"
-            class="mt-1 hidden h-10 w-10 cursor-pointer items-center justify-center rounded-lg  transition-colors hover:border-none hover:bg-[#00AEEC] hover:text-white group-hover:flex"
+            class="mt-1 hidden h-[40px] w-[40px] cursor-pointer items-center justify-center rounded-lg  transition-colors hover:border-none hover:bg-[#00AEEC] hover:text-white group-hover:flex"
             @click="refresh()">
             <div>
                 <svg t="1747969725611" class="w-full h-full" viewBox="0 0 1024 1024" version="1.1"
@@ -38,7 +38,7 @@
             </div>
         </div>
         <div ref="target"
-            class="mt-1 flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg transition-colors hover:border-none hover:bg-[#00AEEC] hover:text-white"
+            class="mt-1 flex h-[40px] w-[40px] cursor-pointer items-center justify-center rounded-lg transition-colors hover:border-none hover:bg-[#00AEEC] hover:text-white"
             @click="!isDragging && clickBtn()">
             <div>
                 <svg t="1747969706988" class="w-full h-full" viewBox="0 0 1024 1024" version="1.1"

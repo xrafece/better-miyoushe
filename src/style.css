@@ -18,7 +18,7 @@
     }
 }
 
-/* resotre miyoushe's filter images dispaly */
+/* resotre miyoushe's filter images display */
 .weapon-filter img,
 .character-filter img {
     display: inline;
@@ -61,7 +61,6 @@
     top: 92px !important;
 }
 
-
 /* miyoushe home page */
 .mhy-home {
     .mhy-layout__main {
@@ -78,10 +77,9 @@
             position: absolute;
             left: calc(220px + 50%);
         }
-
     }
 
-    .fixed_side.mhy-layout__sub_fixed-side>div:nth-child(1) {
+    .fixed_side.mhy-layout__sub_fixed-side > div:nth-child(1) {
         display: none !important;
         height: 0 !important;
     }
@@ -118,8 +116,8 @@
             height: 248px;
         }
 
-        .mhy-article-card__preview>div:nth-child(2),
-        .mhy-article-card__preview>div:nth-child(3) {
+        .mhy-article-card__preview > div:nth-child(2),
+        .mhy-article-card__preview > div:nth-child(3) {
             display: none;
         }
     }
@@ -193,7 +191,7 @@
     }
 }
 
-.mhy-forum.mhy-image-forum {
+.mhy-theme-ys .mhy-forum.mhy-image-forum {
     .mhy-img-article-card {
         width: 280px;
 
@@ -204,13 +202,12 @@
     }
 
     .mhy-article-list__body {
-        padding-top: 375px;
+        padding-top: 440px;
     }
 
     .mhy-side-section.mhy-image-forum__ranking {
         display: block;
         width: 880px;
-        height: 352px;
         position: relative;
         left: -910px;
         top: -590px;
@@ -219,26 +216,43 @@
             display: flex;
             padding: 0;
 
+            .mhy-img-ranking-card:nth-child(4) {
+                display: none;
+            }
+
             .mhy-img-ranking-card {
-                padding-top: 0;
-                padding-left: 0;
+                padding: 0;
+                margin: 0 20px 0 0;
                 flex-direction: column;
                 border-top: none;
+                border-left: 1px solid #ebebeb;
                 border-right: 1px solid #ebebeb;
+                width: 280px;
+                flex-shrink: 0;
+                min-width: 280px;
+
+                .mhy-router-link {
+                    width: 280px;
+                }
 
                 .mhy-img-ranking-card__img {
-                    width: 220px;
-                    height: 220px;
+                    width: 280px;
+                    height: 280px;
+                }
+
+                .mhy-img-ranking-card__rank {
+                    bottom: 7px;
+                    right: 9px;
                 }
 
                 .mhy-img-ranking-card__info {
                     display: flex;
-                    margin-top: 10px;
-                    margin-left: 0;
+                    margin: 10px 0;
                     height: 52px;
+                    width: 280px;
 
                     .mhy-img-ranking-card__top {
-                        width: 137px;
+                        width: 190px;
                         height: auto;
                         margin-left: 10px;
                         text-overflow: ellipsis;
@@ -250,14 +264,34 @@
 
                     .mhy-img-ranking-card__title {
                         display: block;
+                        text-overflow: ellipsis;
+                        width: 260px;
                     }
 
                     .mhy-img-ranking-card__flex {
                         flex-direction: column-reverse;
                     }
-
                 }
             }
+        }
+    }
+}
+
+div:not(.mhy-theme-ys) .mhy-forum.mhy-image-forum {
+    .mhy-img-article-card {
+        width: 280px;
+
+        .mhy-img-article-card__img {
+            width: 280px;
+            height: 280px;
+        }
+    }
+    .mhy-image-forum__4col .mhy-img-article-card {
+        width: 235px;
+
+        .mhy-img-article-card__img {
+            width: 235px;
+            height: 235px;
         }
     }
 }
@@ -267,7 +301,6 @@
         display: block !important;
     }
 }
-
 
 /* yuanshen map */
 .bbs-qr {
@@ -287,19 +320,17 @@
     display: none;
 }
 
-.header__logo>img {
+.header__logo > img {
     display: inline !important;
 }
 
 @media only screen and (min-width: 900px) {
-
     .home__aside .announcement-mask,
     .home__aside .home__map-btn--pc,
     .home__aside .home-channel,
     .home-block,
     .home__position--id-190 .home-channel__right,
-    .summon .summon-aside
-    {
+    .summon .summon-aside {
         display: none !important;
     }
 
@@ -342,7 +373,8 @@
         padding-right: 40px !important;
     }
 
-    .footer--home, .footer--summon {
+    .footer--home,
+    .footer--summon {
         width: 1200px !important;
     }
 }
