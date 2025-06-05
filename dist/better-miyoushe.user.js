@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Better Miyoushe
 // @namespace    http://xrafece.com
-// @version      1.1.5
+// @version      1.2.0
 // @author       Xrafece
 // @description  Make Miyoushe Great Again 美化米游社页面，让米游社再次伟大！！！
 // @icon         https://img-static.mihoyo.com/favicon.ico
@@ -914,6 +914,7 @@
         const user = await getUserGameRolesByToken();
         await fetchUserCharactorList(user.game_uid, user.region);
       };
+      const sideButton = characterPanelStore();
       const hideButton = () => {
         let yes = confirm("是否隐藏侧边按钮？");
         if (!yes) {
@@ -921,7 +922,6 @@
         }
         sideButton.hide();
       };
-      const sideButton = characterPanelStore();
       const target = vue.ref(null);
       const { width, height } = useElementBounding(target, { windowScroll: false });
       const btnPos = useStorage(STORGE_SIDE_BUTTON_POSITION, { right: 10, bottom: 180 }, localStorage);
@@ -1108,7 +1108,6 @@
       showListPanle.isShow ? showListPanle.hide() : showListPanle.show();
     });
     if (!isYsCalculator()) {
-      showListPanle.isShow = true;
       _GM_registerMenuCommand("刷新角色列表", async () => {
         const user = await getUserGameRolesByToken();
         await fetchUserCharactorList(user.game_uid, user.region);

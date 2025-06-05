@@ -23,7 +23,7 @@ export default defineConfig({
             entry: 'src/main.ts',
             userscript: {
                 name: 'Better Miyoushe',
-                version: '1.1.5',
+                version: '1.2.0',
                 description: 'Make Miyoushe Great Again 美化米游社页面，让米游社再次伟大！！！',
                 icon: 'https://img-static.mihoyo.com/favicon.ico',
                 namespace: 'http://xrafece.com',
