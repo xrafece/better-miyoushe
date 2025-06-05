@@ -20,7 +20,6 @@ const menu = () => {
     })
 
     if (!isYsCalculator()) {
-        showListPanle.isShow = true
         GM_registerMenuCommand('刷新角色列表', async () => {
             const user = await getUserGameRolesByToken()
             await fetchUserCharactorList(user.game_uid, user.region)

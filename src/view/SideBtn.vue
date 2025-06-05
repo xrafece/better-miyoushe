@@ -79,6 +79,7 @@ const refresh = async () => {
     await fetchUserCharactorList(user.game_uid, user.region)
 }
 
+const sideButton = characterPanelStore()
 const hideButton = () => {
     let yes = confirm('是否隐藏侧边按钮？')
     if (!yes) {
@@ -87,7 +88,6 @@ const hideButton = () => {
     sideButton.hide()
 }
 
-const sideButton = characterPanelStore()
 
 const target = ref<HTMLElement | null>(null)
 const { width, height } = useElementBounding(target, { windowScroll: false })
