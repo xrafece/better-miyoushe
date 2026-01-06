@@ -121,6 +121,11 @@
             display: none;
         }
     }
+
+    .mhy-activity-card,
+    .mhy-news-card {
+        width: 100%;
+    }
 }
 
 .mhy-forum {

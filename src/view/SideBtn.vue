@@ -57,17 +57,42 @@
 <script setup lang="ts">
 import { characterPanelStore, STORGE_SIDE_BUTTON_POSITION } from '@/store/view'
 import { fetchUserCharactorList, getUserGameRolesByToken } from '@/util/request'
+import { GM_xmlhttpRequest } from '$'
 
 import { Position, useDraggable, useElementBounding, useStorage, useWindowSize } from '@vueuse/core'
 import { computed, ref } from 'vue'
+
+// 从虚拟模块导入 blob-html 内容
+// 开发模式: isDev=true, content 是 dev server URL
+// 生产模式: isDev=false, content 是 HTML 字符串
+import blobHtmlContent, { isDev } from 'virtual:blob-html'
+
+// 开发模式下，将数据写入 data.json 文件
+const writeDataToFile = (data: unknown) => {
+    GM_xmlhttpRequest({
+        method: 'POST',
+        url: 'http://localhost:5173/api/blob-html/data',
+        headers: { 'Content-Type': 'application/json' },
+        data: JSON.stringify(data),
+        onload: (response) => {
+            if (response.status === 200) {
+                console.log('✅ 数据已写入 data.json')
+            }
+        },
+    })
+}
+
 const clickBtn = () => {
-    const pageContent = `
-    <h1>hello world</h1>
-    <div id="app"></div>
-`
-    const blob = new Blob([pageContent], { type: 'text/html;charset=utf-8' })
-    const url = URL.createObjectURL(blob)
-    window.open(url, '_blank')
+    if (isDev) {
+        // 开发模式：直接打开 dev server URL，享受完整的 HMR
+        // 数据通过 data.json 文件传递（点击刷新按钮后写入）
+        window.open(blobHtmlContent, '_blank')
+    } else {
+        // 生产模式：创建 blob URL（同源，可以访问 localStorage）
+        const blob = new Blob([blobHtmlContent], { type: 'text/html;charset=utf-8' })
+        const url = URL.createObjectURL(blob)
+        window.open(url, '_blank')
+    }
 }
 
 const refresh = async () => {
@@ -76,7 +101,12 @@ const refresh = async () => {
         return
     }
     const user = await getUserGameRolesByToken()
-    await fetchUserCharactorList(user.game_uid, user.region)
+    const charList = await fetchUserCharactorList(user.game_uid, user.region)
+
+    // 开发模式下，将数据写入 data.json 文件
+    if (isDev) {
+        writeDataToFile(charList)
+    }
 }
 
 const sideButton = characterPanelStore()

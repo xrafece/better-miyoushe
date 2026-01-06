@@ -1,14 +1,28 @@
 <script setup lang="js">
-import { ref } from 'vue'
-import data from './assets/data.json'
+import { ref, onMounted } from 'vue'
 import _ from 'lodash'
-if (import.meta.env.MODE === 'development') {
-    localStorage.setItem('better-miyoushe-character-list', JSON.stringify(data))
+
+let vueData = ref([])
+
+// 加载数据
+const loadData = async () => {
+    let charaterData = []
+    if (import.meta.env.MODE === 'development') {
+        // 开发模式：请求 mock 接口获取数据
+        const response = await fetch('/api/character-list')
+        charaterData = await response.json()
+    } else {
+        // 生产模式：从 localStorage 读取数据
+        const charaterStr = localStorage.getItem('better-miyoushe-character-list')
+        charaterData = JSON.parse(charaterStr || '[]')
+    }
+    vueData.value = [...charaterData]
 }
 
-const charaterStr = localStorage.getItem('better-miyoushe-character-list')
-let charaterData = JSON.parse(charaterStr || '[]')
-let vueData = ref([...charaterData])
+// 组件挂载时加载数据
+onMounted(() => {
+    loadData()
+})
 
 const skillStyle = (item, index) => {
     index--

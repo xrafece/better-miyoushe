@@ -71,15 +71,23 @@ export const fetchUserCharactorList = async (game_uid: string, region: string) =
     }
     const charList = respBody.data.list
     localStorage.setItem(STORGE_CHARACTER_LIST, JSON.stringify(charList))
+    return charList
 }
 
 export const overrideXHR = () => {
     const originalXHROpen = XMLHttpRequest.prototype.open
-    XMLHttpRequest.prototype.open = function (method, url, async, user, pass) {
+    XMLHttpRequest.prototype.open = function (
+        method: string,
+        url: string | URL,
+        async: boolean = true,
+        user?: string | null,
+        pass?: string | null,
+    ) {
+        const urlStr = url.toString()
         this.addEventListener(
             'readystatechange',
             function () {
-                if (this.readyState === 4 && this.status === 200 && url.includes(matchUrl)) {
+                if (this.readyState === 4 && this.status === 200 && urlStr.includes(matchUrl)) {
                     try {
                         let requestRowData = JSON.parse(this.responseText)
                         let charList = requestRowData.data.list
