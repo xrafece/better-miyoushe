@@ -23,7 +23,11 @@ jobs:
           cache: 'pnpm'
 
       - name: Install dependencies
-        run: pnpm install
+        run: |
+          pnpm install
+          cd ./blob-html
+          pnpm install
+          cd ../
 
       - name: Extract version from tag
         id: version
