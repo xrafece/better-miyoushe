@@ -61,10 +61,10 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           
           # 切换到 dist 分支（如果不存在则创建）
-          git fetch origin dist:dist || git checkout -b dist
+          git fetch origin dist:dist || git checkout --orphan dist
           git checkout dist
           
-          rm -rf .github
+          git rm -rf .
           
           # 复制构建文件到根目录
           cp dist/better-miyoushe.user.js better-miyoushe.user.js
@@ -74,7 +74,7 @@ jobs:
           git commit -m "Release version ${{ steps.version.outputs.version }}"
           
           # 推送到 dist 分支（这会触发 GreasyFork webhook）
-          git push origin dist
+          git push origin dist --force
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
