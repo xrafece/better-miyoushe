@@ -1,13 +1,16 @@
 {
   "name": "better-miyoushe",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "build:minify": "vite build --minify",
-    "preview": "vue-tsc -b && vite preview"
+    "preview": "vue-tsc -b && vite preview",
+    "type-check": "vue-tsc --noEmit -p tsconfig.app.json --composite false",
+    "lint": "prettier --check .",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.14",
@@ -18,6 +21,7 @@
     "vue": "^3.5.13"
   },
   "devDependencies": {
+    "@types/node": "^25.0.6",
     "@vitejs/plugin-vue": "^5.2.1",
     "prettier": "^3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
