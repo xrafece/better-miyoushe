@@ -64,6 +64,8 @@ jobs:
           git fetch origin dist:dist || git checkout -b dist
           git checkout dist
           
+          rm -rf .github
+          
           # 复制构建文件到根目录
           cp dist/better-miyoushe.user.js better-miyoushe.user.js
           
