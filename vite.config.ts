@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import monkey, { cdn } from 'vite-plugin-monkey'
 import { fileURLToPath, URL } from 'node:url'
+import pkg from './package.json'
 
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
@@ -28,7 +29,7 @@ export default defineConfig({
             entry: 'src/main.ts',
             userscript: {
                 name: 'Better Miyoushe',
-                version: '1.3.3',
+                version: pkg.version,
                 description: 'Make Miyoushe Great Again 美化米游社页面，让米游社再次伟大！！！',
                 icon: 'https://img-static.mihoyo.com/favicon.ico',
                 namespace: 'http://xrafece.com',
