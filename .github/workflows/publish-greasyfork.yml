@@ -7,8 +7,6 @@ on:
 # 设置权限
 permissions:
   contents: write
-  packages: write
-  deployments: write
 
 jobs:
   publish:
@@ -17,6 +15,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
