@@ -15,7 +15,6 @@ export default defineConfig({
         // 自动构建 blob-html 并提供虚拟模块
         blobHtmlPlugin({
             blobHtmlDir: 'blob-html',
-            watch: true,
         }),
         vue(),
         AutoImport({
