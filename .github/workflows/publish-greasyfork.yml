@@ -1,0 +1,75 @@
+name: Publish to GreasyFork
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'  # 匹配 v1.0.0, v1.3.2 等格式的 tag
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: '10.10.0'
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Extract version from tag
+        id: version
+        run: |
+          # 从 tag 中提取版本号（去掉 v 前缀）
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Extracted version: $VERSION"
+
+      - name: Update version in vite.config.ts
+        run: |
+          VERSION=${{ steps.version.outputs.version }}
+          # 使用 sed 更新 vite.config.ts 中的版本号
+          sed -i "s/version: '[^']*'/version: '$VERSION'/" vite.config.ts
+          echo "Updated version to $VERSION in vite.config.ts"
+          grep "version:" vite.config.ts
+
+      - name: Build userscript
+        run: pnpm build
+
+      - name: Commit built file to dist branch
+        run: |
+          # 配置 git
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # 切换到 dist 分支（如果不存在则创建）
+          git fetch origin dist:dist || git checkout -b dist
+          git checkout dist
+          
+          # 复制构建文件到根目录
+          cp dist/better-miyoushe.user.js better-miyoushe.user.js
+          
+          # 提交更改
+          git add better-miyoushe.user.js
+          git commit -m "Release version ${{ steps.version.outputs.version }}"
+          
+          # 推送到 dist 分支（这会触发 GreasyFork webhook）
+          git push origin dist
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: dist/better-miyoushe.user.js
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
