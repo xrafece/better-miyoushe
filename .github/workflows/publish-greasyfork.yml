@@ -60,21 +60,24 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           
-          # 切换到 dist 分支（如果不存在则创建）
-          git fetch origin dist:dist || git checkout --orphan dist
-          git checkout dist
+          # 临时备份编译好的文件到工作区之外
+          cp dist/better-miyoushe.user.js /tmp/better-miyoushe.user.js
           
+          # 创建一个干净的孤儿分支（不包含任何历史和 .github 文件夹）
+          # 如果远程已有 dist 分支，我们直接覆盖它
+          git checkout --orphan dist-temp
           git rm -rf .
           
-          # 复制构建文件到根目录
-          cp dist/better-miyoushe.user.js better-miyoushe.user.js
+          # 复制构建文件到临时目录
+          cp /tmp/better-miyoushe.user.js better-miyoushe.user.js
           
           # 提交更改
           git add better-miyoushe.user.js
           git commit -m "Release version ${{ steps.version.outputs.version }}"
           
           # 推送到 dist 分支（这会触发 GreasyFork webhook）
-          git push origin dist --force
+          # 强制推送，确保远程 dist 分支只有这个 .js 文件
+          git push origin dist-temp:dist --force
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
