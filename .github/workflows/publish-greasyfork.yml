@@ -4,6 +4,11 @@ on:
   push:
     tags:
       - 'v*.*.*'  # 匹配 v1.0.0, v1.3.2 等格式的 tag
+# 设置权限
+permissions:
+  contents: write
+  packages: write
+  deployments: write
 
 jobs:
   publish:
