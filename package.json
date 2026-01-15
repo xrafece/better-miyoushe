@@ -1,7 +1,7 @@
 {
   "name": "better-miyoushe",
   "private": true,
-  "version": "1.3.12",
+  "version": "1.3.13",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,7 +10,8 @@
     "preview": "vue-tsc -b && vite preview",
     "type-check": "vue-tsc --noEmit -p tsconfig.app.json --composite false",
     "lint": "prettier --check .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "release": "node scripts/release.js"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.14",
