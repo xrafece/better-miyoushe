@@ -43,6 +43,11 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "Extracted version: $VERSION"
 
+          # 获取 tag 的 message
+          TAG_MESSAGE=$(git tag -l --format='%(contents)' "v$VERSION")
+          echo "tag_message=$TAG_MESSAGE" >> $GITHUB_OUTPUT
+          echo "Tag message: $TAG_MESSAGE"
+
       - name: Update version in vite.config.ts
         run: |
           VERSION=${{ steps.version.outputs.version }}
@@ -73,7 +78,7 @@ jobs:
           
           # 提交更改
           git add better-miyoushe.user.js
-          git commit -m "Release version ${{ steps.version.outputs.version }}"
+          git commit -m "${{ steps.version.outputs.tag_message }}"
           
           # 推送到 dist 分支（这会触发 GreasyFork webhook）
           # 强制推送，确保远程 dist 分支只有这个 .js 文件
