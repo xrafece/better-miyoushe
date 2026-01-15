@@ -29,10 +29,19 @@ if (versionArg === 'patch') {
 pkg.version = newVersion;
 writeFileSync('./package.json', JSON.stringify(pkg, null, 2) + '\n');
 
+// Update CHANGELOG.md
+const changelog = readFileSync('./CHANGELOG.md', 'utf-8');
+const today = new Date().toISOString().split('T')[0];
+const updatedChangelog = changelog.replace(
+  '## [Unreleased]',
+  `## [Unreleased]\n\n## [${newVersion}] - ${today}`
+);
+writeFileSync('./CHANGELOG.md', updatedChangelog);
+
 const finalCommitMsg = commitMsg.replace(/{version}/g, newVersion);
 const finalTagMsg = tagMsg.replace(/{version}/g, newVersion);
 
-execSync('git add package.json', { stdio: 'inherit' });
+execSync('git add package.json CHANGELOG.md', { stdio: 'inherit' });
 execSync(`git commit -m "${finalCommitMsg}"`, { stdio: 'inherit' });
 execSync(`git tag -a v${newVersion} -m "${finalTagMsg}"`, { stdio: 'inherit' });
 execSync('git push', { stdio: 'inherit' });

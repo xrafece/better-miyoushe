@@ -48,6 +48,12 @@ jobs:
           echo "tag_message=$TAG_MESSAGE" >> $GITHUB_OUTPUT
           echo "Tag message: $TAG_MESSAGE"
 
+          # 从 CHANGELOG.md 提取当前版本的更新内容
+          CHANGELOG_CONTENT=$(sed -n "/## \[$VERSION\]/,/## \[/p" CHANGELOG.md | sed '$d' | tail -n +2)
+          echo "changelog_content<<EOF" >> $GITHUB_OUTPUT
+          echo "$CHANGELOG_CONTENT" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
       - name: Update version in vite.config.ts
         run: |
           VERSION=${{ steps.version.outputs.version }}
@@ -88,6 +94,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: dist/better-miyoushe.user.js
+          body: ${{ steps.version.outputs.changelog_content }}
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
