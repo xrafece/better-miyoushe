@@ -60,12 +60,63 @@ import { fetchUserCharactorList, getUserGameRolesByToken } from '@/util/request'
 import { GM_xmlhttpRequest } from '$'
 
 import { Position, useDraggable, useElementBounding, useStorage, useWindowSize } from '@vueuse/core'
-import { computed, ref } from 'vue'
+import { computed, onBeforeUnmount, ref } from 'vue'
 
 // 从虚拟模块导入 blob-html 内容
 // 开发模式: isDev=true, content 是 dev server URL
 // 生产模式: isDev=false, content 是 HTML 字符串
 import blobHtmlContent, { isDev } from 'virtual:blob-html'
+
+const characterListWindowName = 'better-miyoushe-character-list'
+let characterListWindow: Window | null = null
+let characterListBlobUrl: string | null = null
+let characterListWindowWatcher: number | null = null
+
+const stopCharacterListWindowWatcher = () => {
+    if (characterListWindowWatcher !== null) {
+        window.clearInterval(characterListWindowWatcher)
+        characterListWindowWatcher = null
+    }
+}
+
+const revokeCharacterListBlobUrl = () => {
+    if (characterListBlobUrl) {
+        URL.revokeObjectURL(characterListBlobUrl)
+        characterListBlobUrl = null
+    }
+}
+
+const cleanupCharacterListWindow = () => {
+    stopCharacterListWindowWatcher()
+    revokeCharacterListBlobUrl()
+    characterListWindow = null
+}
+
+const syncCharacterListWindowState = () => {
+    if (characterListWindow && characterListWindow.closed) {
+        cleanupCharacterListWindow()
+    }
+}
+
+const startCharacterListWindowWatcher = () => {
+    stopCharacterListWindowWatcher()
+    characterListWindowWatcher = window.setInterval(() => {
+        if (!characterListWindow || characterListWindow.closed) {
+            cleanupCharacterListWindow()
+        }
+    }, 1000)
+}
+
+const openCharacterListWindow = (url: string) => {
+    const opened = window.open(url, characterListWindowName)
+    if (!opened) {
+        return null
+    }
+    characterListWindow = opened
+    opened.focus()
+    startCharacterListWindowWatcher()
+    return opened
+}
 
 // 开发模式下，将数据写入 data.json 文件
 const writeDataToFile = (data: unknown) => {
@@ -83,15 +134,27 @@ const writeDataToFile = (data: unknown) => {
 }
 
 const clickBtn = () => {
+    syncCharacterListWindowState()
+    if (characterListWindow && !characterListWindow.closed) {
+        characterListWindow.focus()
+        return
+    }
+
     if (isDev) {
         // 开发模式：直接打开 dev server URL，享受完整的 HMR
         // 数据通过 data.json 文件传递（点击刷新按钮后写入）
-        window.open(blobHtmlContent, '_blank')
+        openCharacterListWindow(blobHtmlContent)
     } else {
         // 生产模式：创建 blob URL（同源，可以访问 localStorage）
+        revokeCharacterListBlobUrl()
         const blob = new Blob([blobHtmlContent], { type: 'text/html;charset=utf-8' })
         const url = URL.createObjectURL(blob)
-        window.open(url, '_blank')
+        const opened = openCharacterListWindow(url)
+        if (!opened) {
+            URL.revokeObjectURL(url)
+            return
+        }
+        characterListBlobUrl = url
     }
 }
 
@@ -136,6 +199,12 @@ const maxPos = computed(() => {
 })
 
 let rAF = 0
+window.addEventListener('beforeunload', cleanupCharacterListWindow)
+onBeforeUnmount(() => {
+    window.removeEventListener('beforeunload', cleanupCharacterListWindow)
+    cleanupCharacterListWindow()
+})
+
 useDraggable(target, {
     initialValue: {
         x: windowSize.width.value - btnPos.value.right,
