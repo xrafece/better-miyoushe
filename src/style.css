@@ -401,17 +401,33 @@ div:not(.mhy-theme-ys) .mhy-forum.mhy-image-forum {
                     height: auto !important;
                 }
                 .ql-image-box img {
-                    width: 100% !important;
-                    height: auto !important; 
+                    width: auto !important;
+                    height: auto !important;
+                    max-width: 100% !important;
                     display: block;          
                     object-fit: cover;
+                    margin: 0 auto !important;
                 }
+            }
+            .mhy-vod {
+                width: 100% !important;
+                height: auto !important;
+            }
+            .ql-link-card .mhy-link-card.card-mall {
+                width: 792px !important;
             }
         }
     }
 
     .mhy-article-actions {
         margin-left: -760px;
+    }
+
+    @media (max-width: 1592px) {
+        .mhy-article-actions {
+            margin-left: 0;
+            left: 0;
+        }
     }
 
 }

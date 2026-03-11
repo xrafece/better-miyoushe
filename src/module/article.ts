@@ -63,14 +63,12 @@ class ArticleImageUpgrader {
     }
 }
 
-// 导出函数，你可以在这里决定全局延迟多久
 export const initArticleModule = () => {
-    const upgrader = new ArticleImageUpgrader();
+    const upgrader = new ArticleImageUpgrader
     
-    // 即使 DOMContentLoaded 了，我们也额外等 500ms 确保 Vue 渲染完成
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => upgrader.init(800));
+        document.addEventListener('DOMContentLoaded', () => upgrader.init(10));
     } else {
-        upgrader.init(800);
+        upgrader.init(10);
     }
 };
