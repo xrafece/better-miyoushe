@@ -3,7 +3,7 @@ import { execSync } from 'child_process';
 
 const args = process.argv.slice(2);
 const versionArg = args[0];
-const commitMsg = args[1] || `chore: release v{version}`;
+const commitMsg = args[1] || `[chore] release v{version}`;
 const tagMsg = args[2] || `Release v{version}`;
 
 if (!versionArg) {
