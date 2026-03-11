@@ -7,6 +7,7 @@ import { GM_registerMenuCommand } from '$'
 import { characterPanelStore, STORGE_CHARACTER_LIST } from './store/view'
 import { isYsCalculator, isYsMap } from './util/pageType'
 import { fetchUserCharactorList, getUserGameRolesByToken, overrideXHR } from './util/request'
+import { initArticleModule } from './module/article'
 
 const menu = () => {
     const showListPanle = characterPanelStore()
@@ -58,3 +59,5 @@ menu()
 
 // 米游社计算器页面 通过覆写xhr实现自动刷新 localStorage 角色列表数据缓存
 overrideXHR()
+
+initArticleModule()

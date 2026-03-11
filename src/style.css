@@ -387,3 +387,31 @@ div:not(.mhy-theme-ys) .mhy-forum.mhy-image-forum {
 .mhy-bbs-app-header {
     display: none;
 }
+
+.mhy-article-page.mhy-layout.mhy-main-page:not(.mhy-video-page) {
+    width: 1300px;
+
+    .mhy-layout__main {
+        width: 1000px;
+
+        .mhy-article-page__main.mhy-container {
+            .ql-image {
+                .ql-image-box {
+                    width: 100% !important;
+                    height: auto !important;
+                }
+                .ql-image-box img {
+                    width: 100% !important;
+                    height: auto !important; 
+                    display: block;          
+                    object-fit: cover;
+                }
+            }
+        }
+    }
+
+    .mhy-article-actions {
+        margin-left: -760px;
+    }
+
+}
