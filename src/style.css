@@ -409,6 +409,11 @@ div:not(.mhy-theme-ys) .mhy-forum.mhy-image-forum {
                     margin: 0 auto !important;
                 }
             }
+            :nth-child(1 of .ql-image) {
+                .ql-image-box img {
+                    width: 100% !important;
+                }
+            }
             .mhy-vod {
                 width: 100% !important;
                 height: auto !important;
