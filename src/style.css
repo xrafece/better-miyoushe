@@ -321,8 +321,14 @@ div:not(.mhy-theme-ys) .mhy-forum.mhy-image-forum {
 }
 
 /* yuanshen wiki  */
-.home__bbs-recommend.home__bbs-recommend--has-more {
-    display: none;
+.home__bbs {
+    .home__bbs-recommend.home__bbs-recommend--has-more {
+        display: none;
+    }
+
+    .home__bbs-recommend.home__bbs-recommend {
+        display: none;
+    }
 }
 
 .header__logo > img {
