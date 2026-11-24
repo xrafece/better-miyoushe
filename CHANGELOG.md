@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.4.1] - 2026-11-24
+
+1. 修复原神 Wiki 页面二维码未隐藏完全。
+2. 更新 README 文档，明确发版步骤。
+
 ## [1.4.0] - 2026-03-14
 
 1. 修改悬浮按钮的移动逻辑，修复拖拽移动位置漂移的 bug，未确定多端表现是否一致，后续会跟进 mac/win 端表现统一
