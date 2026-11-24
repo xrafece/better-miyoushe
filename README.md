@@ -85,10 +85,10 @@ git push
 推送 `vX.Y.Z` 格式的 tag 后，GitHub 会自动运行 [Publish to GreasyFork](.github/workflows/publish-greasyfork.yml)。
 
 1. 检出 tag 对应的提交，安装 Node.js、pnpm 和两个项目的依赖。
-2. 读取 tag 的版本号和注释，从 `CHANGELOG.md` 提取对应版本的更新说明。
-3. 运行 `pnpm build`，把 `better-miyoushe.user.js` 单独提交并强推到远端 `dist` 分支。Greasy Fork 通过 GitHub webhook 从该分支同步脚本。
+2. 核对 tag 与 `package.json` 的版本号，读取 `CHANGELOG.md` 中该版本的更新说明。
+3. 运行 `pnpm build`，在已有的 `dist` 分支上提交并推送新版 `better-miyoushe.user.js`。提交说明使用当版 changelog，Greasy Fork 通过 GitHub webhook 同步脚本和版本历史。更新说明为空时，提交说明使用 `Release vX.Y.Z`。
 4. 创建 GitHub Release，上传 `better-miyoushe.user.js`，并附上 changelog 和 GitHub 自动生成的发布说明。
 
-发版后，在 GitHub 仓库的 **Actions** 中打开对应 tag 的运行记录，确认任务成功。再检查 **Releases** 里有脚本附件，Greasy Fork 脚本页已显示新版本。Tampermonkey 会按扩展设置检查更新，也可以在扩展里手动检查。
+发版后，在 GitHub 仓库的 **Actions** 中打开对应 tag 的运行记录，确认任务成功。再检查 **Releases** 里的脚本附件，以及 Greasy Fork「历史」里的新版本和更新说明。Tampermonkey 会按扩展设置检查更新，也可以在扩展里手动检查。
 
 本项目仅供学习参考使用，最终解释权归米哈游所有

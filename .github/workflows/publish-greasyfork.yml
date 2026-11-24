@@ -35,66 +35,68 @@ jobs:
           pnpm install
           cd ../
 
-      - name: Extract version from tag
-        id: version
+      - name: Prepare release notes
         run: |
-          # 从 tag 中提取版本号（去掉 v 前缀）
-          VERSION=${GITHUB_REF#refs/tags/v}
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "Extracted version: $VERSION"
+          version=${GITHUB_REF_NAME#v}
+          package_version=$(node -p "require('./package.json').version")
+          if [[ "$package_version" != "$version" ]]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match package.json version $package_version"
+            exit 1
+          fi
 
-          # 获取 tag 的 message
-          TAG_MESSAGE=$(git tag -l --format='%(contents)' "v$VERSION")
-          echo "tag_message=$TAG_MESSAGE" >> $GITHUB_OUTPUT
-          echo "Tag message: $TAG_MESSAGE"
-
-          # 从 CHANGELOG.md 提取当前版本的更新内容
-          CHANGELOG_CONTENT=$(sed -n "/## \[$VERSION\]/,/## \[/p" CHANGELOG.md | sed '$d' | tail -n +2)
-          echo "changelog_content<<EOF" >> $GITHUB_OUTPUT
-          echo "$CHANGELOG_CONTENT" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-
-      - name: Update version in vite.config.ts
-        run: |
-          VERSION=${{ steps.version.outputs.version }}
-          # 使用 sed 更新 vite.config.ts 中的版本号
-          sed -i "s/version: '[^']*'/version: '$VERSION'/" vite.config.ts
-          echo "Updated version to $VERSION in vite.config.ts"
-          grep "version:" vite.config.ts
+          awk -v heading="## [$version]" '
+            { sub(/\r$/, "") }
+            found && /^##[[:blank:]]/ { exit }
+            !found && index($0, heading) == 1 { found = 1; next }
+            !found { next }
+            /^[[:blank:]]*$/ { if (printed) blank_lines = blank_lines "\n"; next }
+            { printf "%s%s\n", blank_lines, $0; blank_lines = ""; printed = 1 }
+          ' CHANGELOG.md > "$RUNNER_TEMP/better-miyoushe-release-notes.md"
 
       - name: Build userscript
         run: pnpm build
 
       - name: Commit built file to dist branch
         run: |
-          # 配置 git
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          
-          # 临时备份编译好的文件到工作区之外
-          cp dist/better-miyoushe.user.js /tmp/better-miyoushe.user.js
-          
-          # 创建一个干净的孤儿分支（不包含任何历史和 .github 文件夹）
-          # 如果远程已有 dist 分支，我们直接覆盖它
-          git checkout --orphan dist-temp
-          git rm -rf .
-          
-          # 复制构建文件到临时目录
-          cp /tmp/better-miyoushe.user.js better-miyoushe.user.js
-          
-          # 提交更改
-          git add better-miyoushe.user.js
-          git commit -m "${{ steps.version.outputs.tag_message }}"
-          
-          # 推送到 dist 分支（这会触发 GreasyFork webhook）
-          # 强制推送，确保远程 dist 分支只有这个 .js 文件
-          git push origin dist-temp:dist --force
+
+          dist_worktree="$RUNNER_TEMP/better-miyoushe-dist"
+          release_notes="$RUNNER_TEMP/better-miyoushe-release-notes.md"
+          git fetch origin refs/heads/dist
+          git worktree add --detach "$dist_worktree" FETCH_HEAD
+
+          # 重跑旧版本时，保留 dist 上已经发布的新版本。
+          version=${GITHUB_REF_NAME#v}
+          dist_version=$(awk '/^\/\/[[:blank:]]+@version[[:blank:]]+/ { print $3; exit }' "$dist_worktree/better-miyoushe.user.js")
+          if [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ && "$dist_version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            newest_version=$(printf '%s\n' "$version" "$dist_version" | sort -V | tail -n 1)
+            if [[ "$version" != "$newest_version" ]]; then
+              echo "dist already contains newer version $dist_version"
+              exit 0
+            fi
+          fi
+
+          cp dist/better-miyoushe.user.js "$dist_worktree/better-miyoushe.user.js"
+          git -C "$dist_worktree" add -- better-miyoushe.user.js
+          if git -C "$dist_worktree" diff --cached --quiet; then
+            echo "dist already contains this build"
+            exit 0
+          fi
+
+          # Greasy Fork 使用修改脚本文件的提交说明作为版本历史。
+          if [[ -s "$release_notes" ]]; then
+            git -C "$dist_worktree" commit --cleanup=verbatim -F "$release_notes"
+          else
+            git -C "$dist_worktree" commit -m "Release $GITHUB_REF_NAME"
+          fi
+          git -C "$dist_worktree" push origin HEAD:refs/heads/dist
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v3
         with:
           files: dist/better-miyoushe.user.js
-          body: ${{ steps.version.outputs.changelog_content }}
+          body_path: ${{ runner.temp }}/better-miyoushe-release-notes.md
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
