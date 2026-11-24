@@ -1,6 +1,6 @@
 # Better Miyoushe
 
-> readme version: 2025.5.23
+> readme version: 2026.11.24
 
 Make Miyoushe Great Again
 
