@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.4.2] - 2026-11-24
+
+1. 修复 Greasy Fork 自动发布流程，推送新版脚本时将当版更新说明同步到「历史」。
+2. 更新 README，说明发布后的版本和更新日志查看方式。
+
 ## [1.4.1] - 2026-11-24
 
 1. 修复原神 Wiki 页面二维码未隐藏完全。
