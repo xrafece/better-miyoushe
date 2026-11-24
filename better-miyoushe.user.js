@@ -1274,4 +1274,3 @@
   initArticleModule();
 
 })(Vue, Pinia);
-// Greasy Fork sync for v1.4.1
