@@ -38,7 +38,7 @@ TODO
 
 ## 本地开发
 
-在包含 `package.json` 和 `blob-html/` 的仓库根目录运行。GitHub Actions 使用 Node.js 20 和 pnpm 10.10.0。
+在包含 `package.json` 和 `blob-html/` 的仓库根目录运行。GitHub Actions 使用 Node.js 24 和 pnpm 10.10.0。
 
 ```sh
 pnpm install
